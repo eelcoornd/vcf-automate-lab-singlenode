@@ -46,68 +46,6 @@ I came across William Lam’s Blog about running VCF on a single NUC and decided
 * **02/28/2025**
   * Added info to use in ATEAlab
 
-* **02/28/2025**
-  * Externalize user variables to configuration files
-  * Fixed Workload Domain spec construction for vLCM-based deployment
-  * Add support for VCF 5.2.1.1
-* **10/09/2024**
-  * Add support for VCF 5.2.1
-    * NSX Manager size changed from `small` to `medium` (needed for 5.2.1 or have seen deployment issues)
-* **07/10/2024**
-  * Management Domain:
-    * Add support for VCF 5.2 (password for Cloud Builder 5.2 must be 15 characters minimum)
-  * Workload Domain:
-    * Add support for VCF 5.2
-    * Add `$SeparateNSXSwitch` variable to specify separate VDS for NSX (simliar to Management Domain option)
-* **05/28/2024**
-  * Management Domain:
-    * Refactor VCF Management Domain JSON generation to be more dynamic
-    * Refactor licensing code to support both licensed keys or license later feature
-    * Add required `clusterImageEnabled` to JSON by default using `$EnableVCLM` variable
-  * Workload Domain:
-    * Add `$EnableVCLM` variable to control vLCM-based image for vSphere Cluster
-    * Add `$VLCMImageName` variable to specify desired vLCM-based image (default uses Management Domain)
-    * Add `$EnableVSANESA` variable to specify whether vSAN ESA is enabled
-    * Add `$NestedESXiWLDVSANESA` variable to specify whether Nested ESXi VM for WLD will be used for vSAN ESA, requiring NVME controller vs PVSCSI controller (default)
-    * Refactor licensing code to support both licensed keys or license later feature
-* **03/27/2024**
-  * Added support for license later (aka 60 day evaluation mode)
-* **02/08/2024**
-  * Added supplemental script `vcf-automated-workload-domain-deployment.ps1` to automate the deployment of Workload Domain
-* **02/05/2024**
-  * Improve substitution code for ESXi vMotion, vSAN & NSX CIDR network
-  * Renamed variables (`$CloudbuilderVMName`,`$CloudbuilderHostname`,`$SddcManagerName`,`$NSXManagerVIPName`,`$NSXManagerNode1Name`) to (`$CloudbuilderVMHostname`,`$CloudbuilderFQDN`,`$SddcManagerHostname`,`$NSXManagerVIPHostname`,`$NSXManagerNode1Hostname`) to better represent the expected value (Hostname and FQDN)
-* **02/03/2024**
-  * Added support to independently define resources (cpu, memory and storage) for Nested ESXi VMs for use with Management and/or Workload Domains
-  * Automatically generate VCF Workload Domain host commission JSON file (vcf-commission-host-api.json) for use with SDDC Manager API (UI will now include `-ui` in the filename)
-* **01/29/2024**
-  * Added support for [VCF 5.1]([text](https://blogs.vmware.com/cloud-foundation/2023/11/07/announcing-availability-of-vmware-cloud-foundation-5-1/))
-  * Automatically start VCF Management Domain bringup in SDDC Manager using generated JSON deployment file (vcf-mgmt.json)
-  * Added support for deploying Nested ESXi hosts for Workload Domain
-  * Automatically generate VCF Workload Domain host commission JSON file (vcf-commission-host.json) for SDDC Manager
-  * Added `-CoresPerSocket` argument to optimize for Nested ESXi deployment for licensing
-  * Added variables (`$NestedESXivMotionNetworkCidr`, `$NestedESXivSANNetworkCidr` and `$NestedESXiNSXTepNetworkCidr`) for customizing ESXi vMotion, vSAN and NSX TEP network CIDRs
-
-* **03/27/2023**
-  * Enable Multiple deployment on the same Cluster
-
-* **02/28/2023**
-  * Added note on DRS-enabled Cluster for vApp creation and pre-check in code
-
-* **02/21/2023**
-  * Added note to Configuration for deploying VCF Management Domain using only a single ESXi host
-
-* **02/09/2023**
-  * Update ESXi Memory to fix "Configure NSX-T Data Center Transport Node" and "Reconfigure vSphere High Availability" failing tasks by increasing ESXi memory to 46GB [explained here](http://strivevirtually.net)
-
-* **01/21/2023**
-  * Added support for [VCF 4.5](https://imthiyaz.cloud/automated-vcf-deployment-script-with-nested-esxi)
-  * Fixed vSAN bootdisk size
-  * Follow [KB 89990](https://knowledge.broadcom.com/external/article?legacyId=89990) if you get "Gateway IP Address for Management is not contactable"
-  * If Failed VSAN Diskgroup follow [FakeSCSIReservations](https://williamlam.com/2013/11/how-to-run-nested-esxi-on-top-of-vsan.html)
-
-* **05/25/2021**
-  * Initial Release
 
 ## Requirements
 
