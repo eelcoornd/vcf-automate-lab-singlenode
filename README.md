@@ -18,14 +18,6 @@
 
 ## Description
 
-You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains. - Steve Jobs
-
-Product Versions used for this Blog:
-
-VMware Cloud Foundation: 5.2.1
-PowerCLI: 13.3
-PowerShell: 7.4.6
-Use Case for Creating this Blog
 Goals:
 Leverage my existing Home Lab Hardware to start using and learning about VMware Cloud Foundation (VCF).
 Enable quick creation or re-creation of a VCF environment.
