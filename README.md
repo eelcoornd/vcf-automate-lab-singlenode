@@ -5,13 +5,16 @@
 * [Description](#description)
 * [Changelog](#changelog)
 * [Requirements](#requirements)
-* [Management Domain Configuration](#management-domain-configuration)
-* [Workload Domain Configuration](#workload-domain-configuration)
+* [Nested ESXi deployment](#Step-1)
+    * [Script](#script-1)
+* [Cloudbuilder deployment](#Step-2)
+    * [Script](#script-2)
 * [Logging](#logging)
-* [Sample Execution](#sample-execution)
-    * [Deploy Nested ESXi and Cloud Builder VMs](#deploy-nested-esxi-and-cloud-builder-vms)
-    * [Deploy VCF Management Domain](#deploy-vcf-management-domain)
-    * [Deploy VCF Workload Domain](#deploy-vcf-workload-domain)
+* [Screenshots](#Screenshots)
+    * [Deploy Nested ESXi](#Step_1)
+    * [Deploy Cloudbuilder](#Step_2)
+    * [Config Cloudbuilder](#Step_3)
+* [Important note mac users](#Mac)
 
 ## Description
 
@@ -48,7 +51,6 @@ I came across William Lam’s Blog about running VCF on a single NUC and decided
 
 
 ## Requirements
-
 
 * VMware Cloud Foundation: 5.2.1
 * PowerCLI: 13.3
@@ -120,7 +122,7 @@ In the example below, I will be using a one /16 VLANs (172.16.0.0/16) with the f
 | vcf-m02-nsx01.svg.int.atealab.no       | 172.16.0.124 | NSX-T VIP             |
 | vcf-m02-nsx01a.svg.int.atealab.no      | 172.16.0.125 | NSX-T Node 1          |
 
-### Step 1
+### Step-1
 ## Purpose: 
 This script automates the creation of the Nested ESXi Host required by VCF Cloud Builder to deploy and configure the VCF environment.
 
@@ -132,7 +134,7 @@ This script automates the creation of the Nested ESXi Host required by VCF Cloud
   Update this script with names and IP addresses and path that match your lab environment.
   Be sure not to use same settings as it wil fail your deployent
 
-## script
+## script-1
 ```console
 # Script to add Nested ESXi Host
 # Author: Dale Hassinger
@@ -353,17 +355,15 @@ New-LogEvent "EndTime: $EndTime"
 New-LogEvent "Duration: $duration minutes to Deploy Nested ESXi Hosts"
 
 ```
-### Script Overview - Step 2
+### Step-2
 
 ## Purpose: 
-This script automates the setup of VCF Cloud Builder and prepares the configuration required to deploy the VCF Management Domain.
-
-## Steps Performed:
-
 * Creates the Cloud Builder VM – Deploys the virtual machine needed to orchestrate the VCF installation.
 * Generate the JSON Configuration File – Creates the input file required by Cloud Builder to install the VCF Management Domain.
   The step to create the JSON file is worth reviewing. It is the easiest method I have found to generate the JSON file required for VCF Cloud Builder.
 * Update this script with names and IP addresses that match your lab environment.
+
+## script-2
 
 ```console
 # Script to create Cloud Builder VM and json file
@@ -1035,8 +1035,8 @@ New-LogEvent "StartTime: $StartTime"
 New-LogEvent "EndTime: $EndTime"
 New-LogEvent "Duration: $duration minutes to Deploy CloudBuilder"
 ```
-
-### Step 1
+### Screenshots
+### Step_1
 ## Deploy Nested ESXi
 
 Screen Shot of the Physical Host, Capacity and Usage, before any installs:
@@ -1056,7 +1056,7 @@ Very little CPU/Memory Usage
 
 ![image](https://github.com/user-attachments/assets/3201e298-b072-46d1-9796-34b0978c50a0)
 
-### Step 2
+### Step_2
 ## Deploy VCF cloudbuilder
 
 Screen Shot of the VCF Cloud Builder VM install PowerShell Script output:
@@ -1070,7 +1070,7 @@ Both VMs moved to a vAPP by the Script
 
 ![image](https://github.com/user-attachments/assets/ecc0b2ad-4511-495b-89b2-635acd6dde09)
 
-### Step 3
+### Step_3
 ## Open cloudbuilder webpage
 
 * https://vcf-m(your client number)-cb01.svg.int.atealab.no
@@ -1128,7 +1128,7 @@ CPU/Memory/Storage all look OK
 ![image](https://github.com/user-attachments/assets/7e776232-7136-4c92-991a-79f777c4de15)
 
 
-### Lessons Learned:
+### Lessons_Learned:
 * Update the security settings on the vSwitch of the physical ESXi hosts running the nested ESXi hosts to ensure proper configuration
 * MAKE SURE DNS IS SETUP WITH THE NAMES AND IPs YOU SPECIFY IN THE SCRIPT! If the install fails, it is probably a DNS issue!
 * This script takes approximately 1.25 to 1.5 hours to run and create a VCF SDDC Manager environment.
@@ -1148,7 +1148,7 @@ I also have the example code saved in my GitHub Repository
 In this blog, I used a single Nested ESXi host to keep things simple, and the performance has been fine for a home lab setup.
 * If you want to expand your environment, you can add additional Nested ESXi Hosts. You can either modify the deployment script or manually add more ESXi hosts to the SDDC Manager after the installation to better understand the process.
 * After the VCF SDDC Manager is installed and running, you can safely delete the Cloud Builder from vCenter to free up space and resources.
-* if the Nested ESXi host has no SSD disks try (this error in the cloudbuilder: ESXi host vcc-dcc found zero SSD devices fro SSD cache tier):
+* if the Nested ESXi host has no SSD disks (this error in the cloudbuilder: ESXi host vcc-dcc found zero SSD devices fro SSD cache tier) try:
 ```console
 esxcli storage hpp device list
 esxcli storage hpp device set -d mpx.vmhba0:C0:T0:L0 -M true
@@ -1158,11 +1158,8 @@ esxcli storage hpp device list
 reboot
 ```
 
-### Downloading the Nested ESXi Virtual Appliances from VMware Fling Site
-For those looking to deploy a Nested ESXi Virtual Appliance, VMware provides pre-configured templates available on their Fling site.
-➡️ Click here to access the downloads
-
-### Important Note for macOS Users
+### Important Note
+## Mac
 The Nested ESXi Virtual Appliance downloads are packaged as ZIP files. However, do not double-click to unpack them on macOS, as it may lead to issues with the extracted contents.
 
 Instead, use the command line to properly extract the ZIP file:
