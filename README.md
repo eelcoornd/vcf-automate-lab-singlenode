@@ -128,10 +128,10 @@ This script automates the creation of the Nested ESXi Host required by VCF Cloud
 
 ## script-1
 ```console
-# Script to add Nested ESXi Host
+ # Script to add Nested ESXi Host
 # Author: Dale Hassinger
 # Based on Script by: William Lam and other vCommunity Web Sites
-# updated with ATEAlab info
+# Updated with ATEA SVG lab info
 
 
 # vCenter Server used to deploy VMware Cloud Foundation Lab
@@ -141,12 +141,11 @@ $VIPassword = "VMware1!"
 
 
 # Full Path to the Nested ESXi
-#$NestedESXiApplianceOVA = "/Users/eelco.orn-dijkstra/scripts/VCF/Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
-$NestedESXiApplianceOVA = "/Users/eelco.orn-dijkstra/scripts/VCF/Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
+$NestedESXiApplianceOVA = "E:\Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
 
 # Nested ESXi VMs for Management Domain
 $NestedESXiHostnameToIPsForManagementDomain = @{
-    "vcf-esxi01-tc25.svg.int.atealab.no"   = "172.16.0.110"
+    "vcf-esxi02-tc25"   = "172.16.0.120"
 } # End Nested Names
 
 
@@ -164,9 +163,9 @@ $VMDatacenter = "atealab.no"
 $VMCluster    = "atealab"
 $VMNetwork    = "vcf-mgnt"
 $VMDatastore  = "datastore1"
-$VMNetmask    = "255.255.252.0"
+$VMNetmask    = "255.255.0.0"
 $VMGateway    = "172.16.0.1"
-$VMDNS        = "172.24.3.7"
+$VMDNS        = "172.24.3.4"
 $VMNTP        = "172.24.3.10"
 $VMPassword   = "VMware1!"
 $VMDomain     = "svg.int.atealab.no"
@@ -344,7 +343,8 @@ $duration = [math]::Round((New-TimeSpan -Start $StartTime -End $EndTime).TotalMi
 New-LogEvent "VCF Lab Nested ESXi Host Build Complete!"
 New-LogEvent "StartTime: $StartTime"
 New-LogEvent "EndTime: $EndTime"
-New-LogEvent "Duration: $duration minutes to Deploy Nested ESXi Hosts"
+New-LogEvent "Duration: $duration minutes to Deploy Nested ESXi Hosts" 
+
 
 ```
 ### Step-2
@@ -358,10 +358,9 @@ New-LogEvent "Duration: $duration minutes to Deploy Nested ESXi Hosts"
 ## script-2
 
 ```console
-# Script to create Cloud Builder VM and json file
+ # Script to create Cloud Builder VM and json file
 # Author: Dale Hassinger
 # Based on Script by: William Lam and some other examples I saw on vCommunity sites
-# Updated with ATEAlab info
 
 
 # vCenter Server used to deploy VMware Cloud Foundation Lab
@@ -371,8 +370,8 @@ $VIPassword = "VMware1!"
 
 # Full Path to Cloud Builder OVA
 #$CloudBuilderOVA = "/Users/dalehassinger/Downloads/VMware-Cloud-Builder-5.2.0.0-24108943_OVF10.ova"
-$CloudBuilderOVA = "/Users/eelco.orn-dijkstra/scripts/VCF/VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova"
-$NestedESXiApplianceOVA = "/Users/eelco.orn-dijkstra/scripts/VCF/Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
+$CloudBuilderOVA = "E:\VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova"
+$NestedESXiApplianceOVA = "E:\Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
 
 # VCF Licenses or leave blank for evaluation mode (requires VCF 5.1.1 or later)
 $VCSALicense = ""
@@ -405,7 +404,7 @@ $SddcManagerLocalPassword = "VMware1!VMware1!"
 
 
 $NestedESXiHostnameToIPsForManagementDomain = @{
-    "vcf-esxi02-tc25.svg.int.atealab.no" = "172.16.0.120"
+    "vcf-esxi02-tc25"   = "172.16.0.120"
 }
 
 
@@ -425,9 +424,9 @@ $NestedESXiWLDCapacityvDisk = "200" #GB
 
 # ESXi Network Configuration
 $NestedESXiManagementNetworkCidr = "172.16.0.0/16" # should match $VMNetwork configuration
-$NestedESXivMotionNetworkCidr    = "172.16.10.0/16"
-$NestedESXivSANNetworkCidr       = "172.16.20.0/16"
-$NestedESXiNSXTepNetworkCidr     = "172.16.30.0/16"
+$NestedESXivMotionNetworkCidr    = "172.30.32.0/24"
+$NestedESXivSANNetworkCidr       = "172.30.33.0/24"
+$NestedESXiNSXTepNetworkCidr     = "172.30.34.0/24"
 
 
 # vCenter Configuration
@@ -455,9 +454,9 @@ $VMDatacenter = "atealab.no"
 $VMCluster    = "atealab"
 $VMNetwork    = "vcf-mgnt"
 $VMDatastore  = "datastore1"
-$VMNetmask    = "255.255.252.0"
+$VMNetmask    = "255.255.0.0"
 $VMGateway    = "172.16.0.1"
-$VMDNS        = "172.24.3.7"
+$VMDNS        = "172.24.3.4"
 $VMNTP        = "172.24.3.10"
 $VMPassword   = "VMware1!"
 $VMDomain     = "svg.int.atealab.no"
@@ -1027,6 +1026,7 @@ New-LogEvent "StartTime: $StartTime"
 New-LogEvent "EndTime: $EndTime"
 New-LogEvent "Duration: $duration minutes to Deploy CloudBuilder"
 ```
+
 ### Screenshots
 ### Step_1
 ## Deploy Nested ESXi
